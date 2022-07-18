@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package controllers
+package services
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import play.api.http.Status
-import play.api.test.Helpers._
-import play.api.test.{FakeRequest, Helpers}
+import com.dmanchester.playfop.sapi.PlayFop
+import org.apache.xmlgraphics.util.MimeConstants
+import views.xml.SubmissionView
 
-class MicroserviceHelloWorldControllerSpec extends AnyWordSpec with Matchers {
+import javax.inject.Inject
 
-  private val fakeRequest = FakeRequest("GET", "/")
-  private val controller = new MicroserviceHelloWorldController(Helpers.stubControllerComponents())
+class PdfGenerationService @Inject() (fop: PlayFop) {
 
-  "GET /" should {
-    "return 200" in {
-      val result = controller.hello()(fakeRequest)
-      status(result) shouldBe Status.OK
-    }
+  def generate(): Array[Byte] = {
+    val renderedDocument = SubmissionView.render("Full disclosure")
+    fop.processTwirlXml(renderedDocument, MimeConstants.MIME_PDF, autoDetectFontsForPDF = true)
   }
+
 }

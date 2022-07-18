@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package controllers
+package config
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import play.api.http.Status
-import play.api.test.Helpers._
-import play.api.test.{FakeRequest, Helpers}
+import javax.inject.{Inject, Singleton}
+import play.api.Configuration
 
-class MicroserviceHelloWorldControllerSpec extends AnyWordSpec with Matchers {
+@Singleton
+class AppConfig @Inject()(config: Configuration) {
 
-  private val fakeRequest = FakeRequest("GET", "/")
-  private val controller = new MicroserviceHelloWorldController(Helpers.stubControllerComponents())
-
-  "GET /" should {
-    "return 200" in {
-      val result = controller.hello()(fakeRequest)
-      status(result) shouldBe Status.OK
-    }
-  }
+  val appName: String = config.get[String]("appName")
 }

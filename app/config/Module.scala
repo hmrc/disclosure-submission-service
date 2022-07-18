@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package controllers
+package config
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import play.api.http.Status
-import play.api.test.Helpers._
-import play.api.test.{FakeRequest, Helpers}
+import com.google.inject.AbstractModule
 
-class MicroserviceHelloWorldControllerSpec extends AnyWordSpec with Matchers {
+class Module extends AbstractModule {
 
-  private val fakeRequest = FakeRequest("GET", "/")
-  private val controller = new MicroserviceHelloWorldController(Helpers.stubControllerComponents())
+  override def configure(): Unit = {
 
-  "GET /" should {
-    "return 200" in {
-      val result = controller.hello()(fakeRequest)
-      status(result) shouldBe Status.OK
-    }
+    bind(classOf[AppConfig]).asEagerSingleton()
   }
 }
